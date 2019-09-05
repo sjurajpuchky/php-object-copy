@@ -1,6 +1,6 @@
 {
     "name": "baba/php-object-copy",
-    "description": "Simple implementation of copy fields from one object to another by Reflection API.",
+    "description": "Simple implementation of copy properties from one object to another by Reflection API.",
     "type": "library",
     "require": {
         "php": ">=5.3.0"

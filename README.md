@@ -1,2 +1,2 @@
 # php-object-copy
-Simple implementation of copy fields from one object to another by Reflection API.
+Simple implementation of copy properties from one object to another by Reflection API.
