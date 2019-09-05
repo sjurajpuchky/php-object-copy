@@ -88,7 +88,7 @@ var_dump($b);
 $a = new A('private', 'public', 'protected');
 $b = new A('', '', '');
 
-ObjectCopier::copyProperties($a, $b, ['private']);
+ObjectCopier::copyProperties($a, $b, array('private'));
 
 var_dump($a);
 var_dump($b);
@@ -96,7 +96,7 @@ var_dump($b);
 $a = new A('private', 'public', 'protected');
 $b = new A('', '', '');
 
-ObjectCopier::copyPropertiesMap($a, $b, ['private' => 'public']);
+ObjectCopier::copyPropertiesMap($a, $b, array('private' => 'public'));
 
 var_dump($a);
 var_dump($b);
