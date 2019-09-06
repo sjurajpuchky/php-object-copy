@@ -22,7 +22,7 @@ class ObjectCopier
      * @param array $exclude Excluded fields, which are not will be copied.
      * @throws ReflectionException
      */
-    public static function copyProperties($src, $dst, $exclude = [])
+    public static function copyProperties($src, $dst, $exclude = array())
     {
         $srcReflector = new ReflectionClass($src);
         $dstReflector = new ReflectionClass($dst);
@@ -42,10 +42,58 @@ class ObjectCopier
                 $dstProperty = $dstReflector->getProperty($name);
                 if ($dstProperty->isPublic() && !$dstProperty->isStatic()) {
                     $dstProperty->setValue($dst, $value);
-                } elseif (!$srcProperty->isStatic() && ($srcProperty->isPrivate() || $srcProperty->isProtected())) {
-                    /** @var ReflectionMethod $getter */
-                    $setter = $srcReflector->getMethod('set' . ucfirst($name));
+                } elseif (!$dstProperty->isStatic() && ($dstProperty->isPrivate() || $dstProperty->isProtected())) {
+                    /** @var ReflectionMethod $setter */
+                    $setter = $dstReflector->getMethod('set' . ucfirst($name));
                     $setter->invoke($dst, $value);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param $obj object Source object.
+     * @param array $exclude Excluded fields, which are not will be null.
+     * @throws ReflectionException
+     */
+    public static function nullProperties($obj, $exclude = array())
+    {
+        $objReflector = new ReflectionClass($obj);
+        /** @var ReflectionProperty $srcProperty */
+        foreach ($objReflector->getProperties() as $srcProperty) {
+            $name = $srcProperty->getName();
+            $value = null;
+            if (!in_array($name, $exclude)) {
+                if ($srcProperty->isPublic() && !$srcProperty->isStatic()) {
+                    $srcProperty->setValue($obj, $value);
+                } elseif (!$srcProperty->isStatic() && ($srcProperty->isPrivate() || $srcProperty->isProtected())) {
+                    /** @var ReflectionMethod $setter */
+                    $setter = $objReflector->getMethod('set' . ucfirst($name));
+                    $setter->invoke($obj, $value);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param $obj object Source object.
+     * @param mixed $value
+     * @param array $exclude Excluded fields, which are not will be set.
+     * @throws ReflectionException
+     */
+    public static function setProperties($obj, $value, $exclude = array())
+    {
+        $objReflector = new ReflectionClass($obj);
+        /** @var ReflectionProperty $srcProperty */
+        foreach ($objReflector->getProperties() as $srcProperty) {
+            $name = $srcProperty->getName();
+            if (!in_array($name, $exclude)) {
+                if ($srcProperty->isPublic() && !$srcProperty->isStatic()) {
+                    $srcProperty->setValue($obj, $value);
+                } elseif (!$srcProperty->isStatic() && ($srcProperty->isPrivate() || $srcProperty->isProtected())) {
+                    /** @var ReflectionMethod $setter */
+                    $setter = $objReflector->getMethod('set' . ucfirst($name));
+                    $setter->invoke($obj, $value);
                 }
             }
         }
@@ -57,7 +105,7 @@ class ObjectCopier
      * @param array $map Mapped fields from source to destination
      * @throws ReflectionException
      */
-    public static function copyPropertiesMap($src, $dst, $map = [])
+    public static function copyPropertiesMap($src, $dst, $map = array())
     {
         $srcReflector = new ReflectionClass($src);
         $dstReflector = new ReflectionClass($dst);
@@ -77,8 +125,8 @@ class ObjectCopier
             if ($dstProperty->isPublic() && !$dstProperty->isStatic()) {
                 $dstProperty->setValue($dst, $value);
             } elseif (!$srcProperty->isStatic() && ($srcProperty->isPrivate() || $srcProperty->isProtected())) {
-                /** @var ReflectionMethod $getter */
-                $setter = $srcReflector->getMethod('set' . ucfirst($dstName));
+                /** @var ReflectionMethod $setter */
+                $setter = $dstReflector->getMethod('set' . ucfirst($dstName));
                 $setter->invoke($dst, $value);
             }
         }
