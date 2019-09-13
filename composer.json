@@ -11,7 +11,7 @@
         }
     },
     "provide": {
-        "baba/php-object-copy": "1.0.0.2"
+        "baba/php-object-copy": "1.0.0.3"
     },
     "license": "MIT",
     "authors": [

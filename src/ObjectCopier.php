@@ -132,7 +132,7 @@ class ObjectCopier
         $objReflector = new ReflectionClass($obj);
         /** @var ReflectionProperty $objProperty */
         foreach ($map as $name) {
-            $objProperty = $objReflector->getProperty(name);
+            $objProperty = $objReflector->getProperty($name);
             if ($objProperty->isPublic() && !$objProperty->isStatic()) {
                 $objProperty->setValue($obj, $value);
             } elseif (!$objProperty->isStatic() && ($objProperty->isPrivate() || $objProperty->isProtected())) {
